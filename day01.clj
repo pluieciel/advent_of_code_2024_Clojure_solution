@@ -1,4 +1,4 @@
-(ns advent-of-code-2024.day-01)
+;advent-of-code-2024.day-01
 ;part 1
 (let [input (slurp "input")
       parse #(map read-string (clojure.string/split % #"   "))
