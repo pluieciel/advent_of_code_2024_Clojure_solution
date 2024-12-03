@@ -29,7 +29,7 @@
               "don't()" (do (reset! d_flag false) [@d_flag @do_n])
               [@d_flag @do_n])
       parse-mul (fn [mul] (apply * (map read-string (re-seq #"\d+" mul))))
-      cal-do-list (fn [[d & muls]] (reduce + (map parse-mul muls)))]
+      cal-do-list (fn [[_ & muls]] (reduce + (map parse-mul muls)))]
   (->> (slurp "input")
     (re-seq patt)
     (#(conj % "do()"))
