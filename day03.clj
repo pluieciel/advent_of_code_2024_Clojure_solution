@@ -16,7 +16,7 @@
     (reduce +)
     println))
 
-;part 2, partition-by
+;part 2: partition-by
 (let [patt #"mul\(\d{1,3},\d{1,3}\)|do\(\)|don't\(\)"
       [d_flag do_n] [(atom true) (atom 0)]
       flag #(case %
