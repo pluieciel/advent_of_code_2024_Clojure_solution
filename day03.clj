@@ -18,18 +18,18 @@
 
 ;part 2: partition-by
 (let [patt #"mul\(\d{1,3},\d{1,3}\)|do\(\)|don't\(\)"
-      [d_flag do_n] [(atom true) (atom 0)]
+      d_flag (atom true)
       flag #(case %
-              "do()" (do (reset! d_flag true) (swap! do_n inc) [@d_flag @do_n])
-              "don't()" (do (reset! d_flag false) [@d_flag @do_n])
-              [@d_flag @do_n])
+              "do()" (do (reset! d_flag true) @d_flag)
+              "don't()" (do (reset! d_flag false) @d_flag)
+              @d_flag)
+      do? #(= "do()" %)
       parse-mul (fn [mul] (apply * (map read-string (re-seq #"\d+" mul))))
-      cal-do-list (fn [[_ & muls]] (reduce + (map parse-mul muls)))]
+      cal-muls (fn [muls] (reduce + (map parse-mul (remove do? muls))))]
   (->> (slurp "input")
     (re-seq patt)
-    (#(conj % "do()"))
     (partition-by flag)
-    (filter #(= "do()" (first %)))
-    (map cal-do-list)
+    (remove #(= "don't()" (first %)))
+    (map cal-muls)
     (reduce +)
     println))
