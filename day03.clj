@@ -6,7 +6,7 @@
   (println (reduce + nums)))
 
 ;part 2: regex
-(let [patt #"((?<=^)|(?<=do\(\)))[\s\S]+?((?=$)|(?=don't\(\))|(?=do\(\)))"
+(let [patt #"(?s)((?<=^)|(?<=do\(\))).+?((?=$)|(?=don't\(\))|(?=do\(\)))"
       patt-mul #"mul\(\d{1,3},\d{1,3}\)"
       parse-mul #(apply * (map read-string (re-seq #"\d+" %)))]
   (->> (slurp "input")
