@@ -6,12 +6,12 @@
   (println (reduce + nums)))
 
 ;part 2: regex
-(let [patt #"(?s)((?<=^)|(?<=do\(\))).+?((?=$)|(?=don't\(\)))"
+(let [patt #"(?s)(?:(?<=^)|(?<=do\(\))).+?(?:(?=$)|(?=don't\(\)))"
       patt-mul #"mul\(\d{1,3},\d{1,3}\)"
       parse-mul #(apply * (map read-string (re-seq #"\d+" %)))]
   (->> (slurp "input")
     (re-seq patt)
-    (mapcat #(re-seq patt-mul (first %)))
+    (mapcat #(re-seq patt-mul %))
     (map parse-mul)
     (reduce +)
     println))
