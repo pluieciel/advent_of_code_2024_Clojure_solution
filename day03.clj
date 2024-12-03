@@ -1,3 +1,4 @@
+;advent-of-code-2024.day-03
 ;part 1
 (let [input (slurp "input")
       muls (re-seq #"mul\(\d{1,3},\d{1,3}\)" input)
