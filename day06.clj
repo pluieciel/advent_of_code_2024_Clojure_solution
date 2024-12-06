@@ -44,7 +44,7 @@
                             ndir (mod (inc dir) 4)]
                         (case (if (#{\^ \> \v \<} nmark) \. nmark)
                           \. (if (path [np dir]) true (recur [np dir] (conj path [np dir])))
-                          \# (if (path [np dir]) true (recur [pos ndir] path))
+                          \# (if (path [pos ndir]) true (recur [pos ndir] path))
                           false))))
       ]
   (->> 
