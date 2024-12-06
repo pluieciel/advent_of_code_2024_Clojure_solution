@@ -48,6 +48,6 @@
                           false))))
       ]
   (->> 
-    (for [c candi :when (detect-loop (assoc-in Map c \#)start dir-id)] 1)
+    (for [c candi :when (detect-loop (assoc-in Map c \#) start dir-id)] 1)
     (reduce +)
     println))
