@@ -4,4 +4,4 @@ my clojure solution for Advent of Code 2024
 
 https://adventofcode.com/
 
-save the input into a file named "input"
+copy the input into a file named "input"
