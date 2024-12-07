@@ -1,10 +1,12 @@
 ;advent-of-code-2024.day-04
+(ns day04
+  (:require [clojure.string :as str]))
 ;part 1
 (let [target '(\X \M \A \S)
       match? #(or (= target %) (= (reverse target) %))
       find-xmas #(->> % (partition 4 1) (filter match?) count)]
   (->> (slurp "input")
-    clojure.string/split-lines
+    str/split-lines
     (#(let [table %]
       (concat [table (apply map list table)]
               (for [l4 (partition 4 1 table)]
@@ -23,7 +25,7 @@
                (and (= c \A)
                     (target-set (list a b e d))))]
   (->> (slurp "input")
-    clojure.string/split-lines
+    str/split-lines
     ((fn [table]
       (for [l3 (partition 3 1 table)]
         (->> l3

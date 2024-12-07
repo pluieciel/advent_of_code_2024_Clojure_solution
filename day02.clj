@@ -1,8 +1,10 @@
 ;advent-of-code-2024.day-02
+(ns day02
+  (:require [clojure.string :as str]))
 ;part 1
 (let [input (slurp "input")
-      parse #(map read-string (clojure.string/split % #" "))
-      lines (map parse (clojure.string/split input #"\n"))
+      parse #(map read-string (str/split % #" "))
+      lines (map parse (str/split input #"\n"))
       diff (map #(map - (butlast %) (rest %)) lines)
       ok? #(or (every? #{1 2 3} %) (every? #{-1 -2 -3} %))
       res (count (filter ok? diff))
@@ -11,8 +13,8 @@
 
 ;part 2
 (let [input (slurp "input")
-      parse #(map read-string (clojure.string/split % #" "))
-      lines (map parse (clojure.string/split input #"\n"))
+      parse #(map read-string (str/split % #" "))
+      lines (map parse (str/split input #"\n"))
       dif #(map - (butlast %) (rest %))
       diff (map dif lines)
       ok? #(or (every? #{1 2 3} %) (every? #{-1 -2 -3} %))

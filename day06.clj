@@ -1,6 +1,8 @@
 ;advent-of-code-2024.day-06
+(ns day06
+  (:require [clojure.string :as str]))
 ;part 1
-(let [Map (->> (slurp "input") clojure.string/split-lines)
+(let [Map (->> (slurp "input") str/split-lines)
       start (first
              (for [y (range (count Map)) x (range (count (first Map)))
                    :when (#{\^ \> \v \<} (get-in Map [y x]))]
@@ -18,7 +20,7 @@
     println))
 
 ;part 2
-(let [Map (->> (slurp "input") clojure.string/split-lines (mapv vec))
+(let [Map (->> (slurp "input") str/split-lines (mapv vec))
       start (first
              (for [y (range (count Map)) x (range (count (first Map)))
                    :when (#{\^ \> \v \<} (get-in Map [y x]))]

@@ -1,25 +1,25 @@
 ;advent-of-code-2024.day-05
-
-(require '[clojure.set])
+(ns day05
+  (:require [clojure.string :as str] [clojure.set :as set]))
 
 (let [[p1 p2] (->> (slurp "input")
-                (#(clojure.string/split % #"\n\n"))
-                (map clojure.string/split-lines))
+                (#(str/split % #"\n\n"))
+                (map str/split-lines))
       dict (->> p1
-             (map #(map read-string (clojure.string/split % #"\|")))
+             (map #(map read-string (str/split % #"\|")))
              (map (fn [[pre post]] {post #{pre}}))
-             (apply merge-with clojure.set/union))
+             (apply merge-with set/union))
       ok? (fn [input]
             (loop [[a & bs] input]
               (cond
                 (empty? bs) true
-                (empty? (clojure.set/intersection (set bs) (get dict a #{}))) (recur bs)
+                (empty? (set/intersection (set bs) (get dict a #{}))) (recur bs)
                 :else false)))
       ]
 
   ;part 1
   (->> p2
-    (map #(map read-string (clojure.string/split % #",")))
+    (map #(map read-string (str/split % #",")))
     (filter ok?)
     (map #(nth % (/ (count %) 2)))
     (reduce +)
@@ -27,12 +27,12 @@
 
   ;part 2
   (->> p2
-    (map #(map read-string (clojure.string/split % #",")))
+    (map #(map read-string (str/split % #",")))
     (remove ok?)
     (map (fn [l]
        (let [s (set l)]
          (->> l
-           (map #(vector % (count (clojure.set/intersection (disj s %) (get dict % #{})))))
+           (map #(vector % (count (set/intersection (disj s %) (get dict % #{})))))
            (sort-by second)))))
     (map #(first (nth % (/ (count %) 2))))
     (reduce +)

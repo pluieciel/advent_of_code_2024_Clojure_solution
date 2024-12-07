@@ -1,4 +1,7 @@
 ;advent-of-code-2024.day-07
+(ns day07
+  (:require [clojure.string :as str]))
+
 (let [ops [* +]
       ok? (fn [[f & r] ops]
             (some #(= f %)
@@ -10,8 +13,8 @@
                    (rest l))))))
       ops2 [* + (fn [a b] (read-string (str a b)))]
       parsed (->> (slurp "input")
-               clojure.string/split-lines
-               (map #(map read-string (clojure.string/split % #": | "))))
+               str/split-lines
+               (map #(map read-string (str/split % #": | "))))
   ]
   ;part 1
   (->> parsed
