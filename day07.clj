@@ -14,8 +14,7 @@
       ops2 [* + (fn [a b] (read-string (str a b)))]
       parsed (->> (slurp "input")
                str/split-lines
-               (map #(map read-string (str/split % #": | "))))
-  ]
+               (map #(map read-string (str/split % #": | "))))]
   ;part 1
   (->> parsed
     (filter #(ok? % ops))
