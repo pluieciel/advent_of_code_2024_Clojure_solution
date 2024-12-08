@@ -34,7 +34,7 @@
        println)
   
   ;part 2
-  (->> 
-   (for [c candi :when (detect-loop (assoc-in Map c \#) start dir-id)] 1)
-   count
-   println))
+  (->> candi
+       (filter #(detect-loop (assoc-in Map % \#) start dir-id))
+       count
+       println))
