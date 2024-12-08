@@ -17,7 +17,7 @@
                   \. (recur np dir (conj path np))
                   \# (recur pos ndir path)
                   path)))
-      candi (->> path (remove #(= % start)) set)
+      candi (disj path start)
       detect-loop (fn [Map]
                     (loop [pos-dir [start dir-id] path #{[start dir-id]}]
                       (let [[pos dir] pos-dir
