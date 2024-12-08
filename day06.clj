@@ -18,7 +18,7 @@
                   \# (recur pos ndir path)
                   path)))
       candi (->> path (remove #(= % start)) set)
-      detect-loop (fn [Map start dir-id]
+      detect-loop (fn [Map]
                     (loop [pos-dir [start dir-id] path #{[start dir-id]}]
                       (let [[pos dir] pos-dir
                             np (mapv + pos (dirs dir))
@@ -35,6 +35,6 @@
   
   ;part 2
   (->> candi
-       (filter #(detect-loop (assoc-in Map % \#) start dir-id))
+       (filter #(detect-loop (assoc-in Map % \#)))
        count
        println))
