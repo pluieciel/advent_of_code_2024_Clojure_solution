@@ -15,18 +15,18 @@
                     [y x]))
       poss->pairs #(comb/combinations % 2)
       pair->res2 (fn [[pos1 pos2]]
-                  (let [res1 (mapv - (map #(* 2 %) pos1) pos2)
-                        res2 (mapv - (map #(* 2 %) pos2) pos1)]
-                    (set (filter within? [res1 res2]))))
+                   (let [res1 (mapv - (map #(* 2 %) pos1) pos2)
+                         res2 (mapv - (map #(* 2 %) pos2) pos1)]
+                     (set (filter within? [res1 res2]))))
       pair->ress (fn [[pos1 pos2]]
                    (let [diff1 (mapv - pos1 pos2)
                          diff2 (mapv - pos2 pos1)
                          get-dir (fn [diff pos]
                                    (->> (range)
-                                          (map #(map (fn [n] (* % n)) diff))
-                                          (map #(map + pos %))
-                                          (take-while within?)
-                                          set))]
+                                        (map #(map (fn [n] (* % n)) diff))
+                                        (map #(map + pos %))
+                                        (take-while within?)
+                                        set))]
                      (set/union (get-dir diff1 pos1) (get-dir diff2 pos2))))]
   ;part 1
   (->> freqs
