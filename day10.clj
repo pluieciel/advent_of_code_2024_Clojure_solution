@@ -13,14 +13,8 @@
              (->> [[-1 0] [1 0] [0 -1] [0 1]]
                   (map #(mapv + pos %))
                   (filter #(= (inc (get-in Map pos)) (get-in Map %)))))
-      poss-step (fn [poss]
-                  (->> poss
-                       (mapcat step)))
-      start->dest (fn [start]
-                    (loop [n 0 poss start]
-                      (if (= n 9)
-                        poss
-                        (recur (inc n) (poss-step poss)))))]
+      poss-step (fn [poss] (->> poss (mapcat step)))
+      start->dest (fn [start] (nth (iterate poss-step start) 9))]
   ;part 1
   (->> starts
        (map #(->> % start->dest set count))
