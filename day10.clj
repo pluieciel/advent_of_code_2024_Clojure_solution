@@ -19,20 +19,15 @@
       start->dest (fn [start]
                     (loop [n 0 poss start]
                       (if (= n 9)
-                        (count poss)
-                        (recur (inc n) (set (poss-step poss))))))
-      start->dest2 (fn [start]
-                    (loop [n 0 poss start]
-                      (if (= n 9)
-                        (count poss)
+                        poss
                         (recur (inc n) (poss-step poss)))))]
   ;part 1
   (->> starts
-       (map start->dest)
+       (map #(->> % start->dest set count))
        (reduce +)
        println)
   ;part 2
   (->> starts
-       (map start->dest2)
+       (map #(->> % start->dest count))
        (reduce +)
        println))
