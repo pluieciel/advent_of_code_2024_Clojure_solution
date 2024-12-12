@@ -5,3 +5,5 @@
 .nrepl-port
 input
 exa
+.nrepl-port
+docker*
