@@ -1,21 +1,25 @@
 ;advent-of-code-2024.day-01
 (ns day01
   (:require [clojure.string :as str]))
+
+(defn parse [input]
+  (->> (slurp input)
+       str/split-lines
+       (map #(str/split % #"   "))
+       (map #(map read-string %))))
+
 ;part 1
-(let [input (slurp "input")
-      parse #(map read-string (str/split % #"   "))
-      lines (map parse (str/split input #"\n"))
-      [l1 l2] (map sort (apply map list lines))
-      res (reduce + (map #(Math/abs (- %1 %2)) l1 l2))
-      ]
-  (println res))
+(->> (parse "input")
+     (apply map list)
+     (map sort) 
+     (apply map #(->> (- %1 %2) Math/abs))
+     (reduce +)
+     println)
 
 ;part 2
-(let [input (slurp "input")
-      parse #(map read-string (str/split % #"   "))
-      lines (map parse (str/split input #"\n"))
-      [l1 l2] (apply map list lines)
-      fre (frequencies l2)
-      res (reduce + (map #(* % (get fre % 0)) l1))
-      ]
-  (println res))
+(->> (parse "input")
+     (apply map list)
+     (#(let [[l1 l2] % freq (frequencies l2)]
+         (map (fn [n] (* n (get freq n 0))) l1)))
+     (reduce +)
+     println)
