@@ -1,9 +1,14 @@
+# clojure
 .clj-kondo
 .lsp
 .calva
 .cpcache
 .nrepl-port
+target/
+
+# input
 input
 exa
-.nrepl-port
+
+# docker
 docker*
