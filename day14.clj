@@ -38,11 +38,11 @@
            (println)))))
 
 (defn check?
-  "find the longest consecutive robots, and compare with 10"
+  "find longest vertical consecutive robots, and compare with 10"
   [vs]
   (->> vs
        (group-by first) ;group by same x
-       (apply max-key #(count (val %))) ;get the row with most robots
+       (apply max-key #(count (val %))) ;get the col with most robots
        second
        (map second) ;get ys
        sort
