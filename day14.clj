@@ -20,33 +20,34 @@
       step100 #(nth (iterate step1 %) 100)
       quad #(vector (< (first %) hw) (< (second %) hh))]
   (->> (parse "input")
-       (map step100)
-       (remove #(or (= (first %) hw) (= (second %) hh)))
-       (group-by quad)
+       (map step100) ;run 100 times
+       (remove #(or (= (first %) hw) (= (second %) hh))) ;remove middle row and middle col
+       (group-by quad) ;get 4 quads
        (map #(count (val %)))
        (reduce *)
        println))
 
 ;part 2
-(defn myprint [vs]
+(defn myprint "print to see the tree" [vs] 
   (->> vs
        (map #(vec (take 2 %)))
-       (set)
-       ((fn [s]
-          (doseq [y (range 103)]
-            (doseq [x (range 101)]
-              (print (if (s [x y]) \1 \.)))
-            (println))))))
+       set
+       (#(doseq [y (range 103)]
+           (doseq [x (range 101)]
+             (print (if (% [x y]) \1 \.)))
+           (println)))))
 
-(defn check? [vs]
+(defn check?
+  "find the longest consecutive robots, and compare with 10"
+  [vs]
   (->> vs
-       (group-by first)
-       (apply max-key #(count (val %)))
+       (group-by first) ;group by same x
+       (apply max-key #(count (val %))) ;get the row with most robots
        second
-       (map second)
+       (map second) ;get ys
        sort
        (map-indexed (fn [idx n] [n (- n idx)]))
-       (partition-by second)
+       (partition-by second) ;consecutive ones in same group
        (map count)
        (apply max)
        (< 10)))
