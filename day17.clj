@@ -16,14 +16,14 @@
     (let [op (get lst @ptr)
           va (get lst (inc @ptr))]
       (case op
-        0 (reset! A (int (/ @A (Math/pow 2 (comb va)))))
+        0 (reset! A (long (/ @A (Math/pow 2 (comb va)))))
         1 (reset! B (bit-xor (mod @B 8) va))
         2 (reset! B (mod (comb va) 8))
         3 (when (not= @A 0) (reset! ptr va))
         4 (reset! B (bit-xor @B @C))
         5 (conj! out (mod (comb va) 8))
-        6 (reset! B (int (/ @A (Math/pow 2 (comb va)))))
-        7 (reset! C (int (/ @A (Math/pow 2 (comb va))))))
+        6 (reset! B (long (/ @A (Math/pow 2 (comb va)))))
+        7 (reset! C (long (/ @A (Math/pow 2 (comb va))))))
       (when (not (and (= op 3) (not= @A 0))) (swap! ptr + 2))))
   (->> (persistent! out)
        (str/join ",")
