@@ -45,17 +45,17 @@
                            (= (+ (* b1 x) (* b2 y)) b))
                     (lg/== q [x y]))))
 
-(->> (parse "input")
-     (map cal)
-     (remove empty?)
-     (transduce (map #(let [[x y] (first %)] (+ (* 3 x) y))) +)
+(->> (parse "input") 
+     (transduce (comp (map cal)
+                      (map #(if-let [[x y] (first %)] (+ (* 3 x) y) 0)))
+                +)
      println)
 
 ;part 2
 (->> (parse "input")
      (map #(let [[a b c d e f] %]
              [a b c d (+ 10000000000000 e) (+ 10000000000000 f)]))
-     (map cal)
-     (remove empty?)
-     (transduce (map #(let [[x y] (first %)] (+ (* 3 x) y))) +)
+     (transduce (comp (map cal)
+                      (map #(if-let [[x y] (first %)] (+ (* 3 x) y) 0)))
+                +)
      println)
