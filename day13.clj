@@ -45,7 +45,7 @@
                            (= (+ (* b1 x) (* b2 y)) b))
                     (lg/== q [x y]))))
 
-(->> (parse "input") 
+(->> (parse "input")
      (transduce (comp (map cal)
                       (map #(if-let [[x y] (first %)] (+ (* 3 x) y) 0)))
                 +)
