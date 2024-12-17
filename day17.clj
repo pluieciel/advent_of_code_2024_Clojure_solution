@@ -55,9 +55,9 @@
            (recur (step doing (first todo)) (rest todo))))
        (map #(map first %))
        (map (fn [lst]
-          (loop [todo (rest lst) res (first lst) pos 8]
-            (if (empty? todo)
-              res
-              (recur (rest todo) (+' (mod res pos) (*' (first todo) pos)) (*' pos 8))))))
+              (loop [todo (rest lst) res (first lst) pos 8]
+                (if (empty? todo)
+                  res
+                  (recur (rest todo) (+' (mod res pos) (*' (first todo) pos)) (*' pos 8))))))
        (apply min)
        println))
