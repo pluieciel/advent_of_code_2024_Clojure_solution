@@ -25,14 +25,15 @@
                                        (not (get done npos))
                                        (not (get Walls npos)))]
                         [npos (inc score) (+ (inc score) (dist npos end))])]
-          ;(println pos)
           (if (empty? (filter #(= end (first %)) newposs))
             (recur (sort-by last (set (concat (rest todo) newposs))) (conj done pos))
             (filter #(= end (% 0)) newposs)))))))
 
+;part 1
 (let [Walls (->> (parse "input") (take 1024) set)]
   (->> (cal [0 0] [70 70] Walls)))
 
+;part 2
 (let [input (parse "input")
       n 2900
       Walls (->> input (take n) set)]
