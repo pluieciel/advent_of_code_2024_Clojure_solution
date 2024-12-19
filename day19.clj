@@ -18,7 +18,7 @@
   (loop [curr #{target}]
     (let [res (->> (for [t curr]
                      (for [col cols :when (match t col)]
-                       (subs t (count (match t col)))))
+                       (subs t (count col))))
                    flatten
                    set)]
       (cond
