@@ -42,8 +42,8 @@
 (def cal
   (memoize
    (fn [target cols pos]
-     (if (<= pos 0)
-       (if (zero? pos) 1 0)
+     (if (zero? pos)
+       1
        (->> (for [col cols :when (match-end (subs target 0 pos) col)]
               (cal target cols (- pos (count col))))
             (reduce +))))))
