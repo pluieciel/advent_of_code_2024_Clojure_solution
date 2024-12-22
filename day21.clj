@@ -80,10 +80,10 @@
        (* (Integer/parseInt (subs s 0 3)))))
 
 ;part 1
-(->> (parse "input copy")
+(->> (parse "input")
      (transduce (map (partial cal-one 2)) +)
      println)
 ;part 2
-(->> (parse "input copy")
+(->> (parse "input")
      (transduce (map (partial cal-one 25)) +)
      println)
