@@ -11,17 +11,16 @@
   (loop [[[a b] & r] pairs ctr 0]
     (if r
       (recur r (+ ctr (loop [r2 r ctr2 0]
-                        (if (empty? r2)
-                          ctr2
-                          (let [[c d] (first r2)]
-                            (cond
-                              (and (= b c)
-                                   (some #(= \t (first %)) [a b d])
-                                   (some #{(list a d) (list d a)} r)) (recur (rest r2) (inc ctr2))
-                              (and (= b d)
-                                   (some #(= \t (first %)) [a b c])
-                                   (some #{(list a c) (list c a)} r)) (recur (rest r2) (inc ctr2))
-                              :else (recur (rest r2) ctr2)))))))
+                        (if-let [[c d] (first r2)]
+                          (recur (rest r2) (if (or (and (= b c)
+                                                        (some #(= \t (first %)) [a b d])
+                                                        (some #{(list a d) (list d a)} r))
+                                                   (and (= b d)
+                                                        (some #(= \t (first %)) [a b c])
+                                                        (some #{(list a c) (list c a)} r)))
+                                             (inc ctr2)
+                                             ctr2))
+                          ctr2))))
       ctr)))
 
 (->> (parse "input")
