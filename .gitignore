@@ -7,8 +7,11 @@
 target/
 
 # input
-input*
-exa*
+in*
+ex*
 
 # docker
 docker*
+
+# irrelevant
+cg
