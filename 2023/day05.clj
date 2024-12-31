@@ -16,15 +16,30 @@
                             (map (fn [line]
                                    (->> (str/split line #" ")
                                         (map read-string))))))))]
+  
+  (def cal
+    (memoize
+     (fn [seed]
+       (reduce
+        (fn [curr ms]
+          (let [target (filter #(let [[_ ss len] %] (<= ss curr (+ ss (dec len)))) ms)]
+            (if (empty? target)
+              curr
+              (let [[ds ss _] (first target)]
+                (+ ds (- curr ss))))))
+        seed maps))))
+  
+  (->> (for [seed (->> seeds (partition 2) (mapcat #(let [[s l] %] (range s (+ s l)))))]
+         (cal seed))
+       (apply min))
+  
   (->> (for [seed seeds]
          (reduce
           (fn [curr ms]
-            (reduce
-             (fn [curr m]
-               (let [[ds ss len] m]
-                 (if (<= ss curr (+ ss (dec len)))
-                   (+ ds (- curr ss))
-                   curr)))
-             curr ms))
-         seed maps))
+            (let [target (filter #(let [[_ ss len] %] (<= ss curr (+ ss (dec len)))) ms)]
+              (if (empty? target)
+                curr
+                (let [[ds ss _] (first target)]
+                  (+ ds (- curr ss))))))
+          seed maps))
        (apply min)))
