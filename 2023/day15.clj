@@ -13,7 +13,7 @@
         (recur new bs)
         new))))
 ;part 1
-(comment ->> (parse "./2023/in15")
+(->> (parse "./2023/in15")
      (map myhash)
      (reduce +))
 
