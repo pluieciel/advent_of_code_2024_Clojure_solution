@@ -1,6 +1,7 @@
 ;advent-of-code-2023.day17
 (ns day17
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [clojure.data.priority-map :refer [priority-map]]))
 
 (defn parse [i]
   (->> (slurp i)
@@ -9,34 +10,105 @@
 
 (def dirs [[-1 0] [0 1] [1 0] [0 -1]]) ;0 ^ 1 > 2 v 3 <
 
-(let [Map (parse "./2023/ex17")
+;part 1
+(let [Map (parse "./2023/in17")
       h (count Map) w (count (first Map))
-      end [(dec h) (dec w)]]
-  (defn dijk [start] ; [:pos '(op op op) :score]
-    (loop [done {} todo [[[start [1]] 0]] cnt 0]
-      ;(println done todo)
-      (if ;(= cnt 200)
-      (empty? todo)
-        ;(filter (fn [[[pos d] v]] (= pos end)) done)
-        done
-        (let [[[pos ds] score] (first todo)
-              currdir (first ds)
-              rdir (-> (inc currdir) (mod 4))
-              ldir (-> (dec currdir) (mod 4))
-              newdirs (if (and (= 3 (count ds)) (apply = ds))
-                        [rdir ldir]
-                        [rdir currdir ldir])
-              newcand (for [ndir newdirs
-                            :let [npos (mapv + pos (get dirs ndir))
-                                  newscore (get-in Map npos)]
-                            :when newscore]
-                        [[npos (take 3 (conj ds ndir))] (+ score newscore)])
-              toadd (remove #(get-in done (let [[[pos ds] s] %] [pos (if (and (= 3 (count ds)) (apply = ds)) (first ds) nil)])) newcand)
-              toadd (map (fn [[[pos ds] s]] [[pos (first (partition-by identity ds))] s]) toadd)]
-          (recur
-           (->> (into {} (map (fn [[[pos ds] s]] [[pos (if (and (= 3 (count ds)) (apply = ds)) (first ds) nil)] s]) newcand))
-                (merge-with #(min %1 %2) done))
-           (sort-by last (concat (rest todo) toadd))
-           (inc cnt))))))
-  (dijk [0 0])
-  )
+      end [(dec h) (dec w)]
+      visited (atom #{})]
+  
+  (defn newdirs [pos score pq dir]
+    (let [d (get dirs dir)
+          npos (mapv + pos d)]
+      (if-let [ns (get-in Map npos)]
+        (let [ns (+ score ns) nkey [npos dir 1] nows (get pq nkey)]
+          (if (or (nil? nows) (< ns nows))
+            (assoc pq nkey ns)
+            pq))
+        pq)))
+  
+  (defn getnew [curr pq]
+    (let [[[pos dir steps] score] curr
+          ld (if (= dir 0) 3 (dec dir))
+          rd (if (= dir 3) 0 (inc dir))
+          pq (reduce (partial newdirs pos score) pq [ld rd])]
+      (if (< steps 3)
+        (let [npos (mapv + pos (get dirs dir))]
+          (if-let [ns (get-in Map npos)]
+            (let [ns (+ score ns) nkey [npos dir (inc steps)] nows (get pq nkey)]
+              (if (or (nil? nows) (< ns nows))
+                (assoc pq nkey ns)
+                pq))
+            pq))
+        pq)))
+
+  (defn dijk [start]
+    (loop [pq (priority-map [start -1 0] 0)]
+      ;(println pq)
+      (let [[[pos dir steps] score :as curr] (peek pq)
+            pq (pop pq)]
+        (if (contains? @visited [pos dir steps])
+          (recur pq)
+          (do
+            (swap! visited conj [pos dir steps])
+            (if (= pos end)
+              score
+              (if (= dir -1)
+                (recur (reduce (partial newdirs pos score) pq [1 2]))
+                (recur (getnew curr pq)))))))))
+  
+  (dijk [0 0]))
+
+;part 2
+(let [Map (parse "./2023/in17")
+      h (count Map) w (count (first Map))
+      end [(dec h) (dec w)]
+      visited (atom #{})]
+  
+  (defn newdirs2 [pos score pq dir]
+    (let [d (get dirs dir)
+          npos (mapv + pos (map #(* 4 %) d))]
+      (if-let [ns (get-in Map npos)]
+        (let [ns (+ score ns
+                    (reduce +
+                            (map #(get-in Map
+                                          (mapv + pos (map
+                                                       (fn [x]
+                                                         (* x %)) d))) [1 2 3])))
+              nkey [npos dir 4]
+              nows (get pq nkey)]
+          (if (or (nil? nows) (< ns nows))
+            (assoc pq nkey ns)
+            pq))
+        pq)))
+  
+  (defn getnew2 [curr pq]
+    (let [[[pos dir steps] score] curr
+          ld (if (= dir 0) 3 (dec dir))
+          rd (if (= dir 3) 0 (inc dir))
+          pq (reduce (partial newdirs2 pos score) pq [ld rd])]
+      (if (< steps 10)
+        (let [npos (mapv + pos (get dirs dir))]
+          (if-let [ns (get-in Map npos)]
+            (let [ns (+ score ns) nkey [npos dir (inc steps)] nows (get pq nkey)]
+              (if (or (nil? nows) (< ns nows))
+                (assoc pq nkey ns)
+                pq))
+            pq))
+        pq)))
+
+  (defn dijk2 [start]
+    (loop [pq (priority-map [start -1 0] 0)]
+      ;(println pq)
+      (let [[[pos dir steps] score :as curr] (peek pq)
+            pq (pop pq)]
+        (if (contains? @visited [pos dir steps])
+          (recur pq)
+          (do
+            (swap! visited conj [pos dir steps])
+            (if (= pos end)
+              score
+              (if (= dir -1)
+                (recur (reduce (partial newdirs2 pos score) pq [1 2]))
+                (recur (getnew2 curr pq)))))))))
+  
+  (dijk2 [0 0]))
