@@ -84,8 +84,7 @@
                         (<= e (inc num)) (recur (rest todo) nums)
                         :else (let [fore [s (inc num)] post [(inc num) e]]
                                 (onestep dest (assoc nums key post))
-                                (recur (rest todo) (assoc nums key fore)))))
-                )))))))
+                                (recur (rest todo) (assoc nums key fore))))))))))))
   (onestep "in" start)
   (->> @res
        (map (fn [one]
