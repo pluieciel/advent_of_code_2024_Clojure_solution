@@ -8,33 +8,25 @@
        str/split-lines
        (mapv vec)))
 
+(def dirs [[1 0] [-1 0] [0 1] [0 -1]])
+
 (let [Map (parse "./2023/in23")
       h (count Map) w (count (first Map))
       [start] (for [x (range w) :when (= \. (get-in Map [0 x]))] [0 x])
-      [end] (for [x (range w) :when (= \. (get-in Map [(dec h) x]))] [(dec h) x])
-      visited (atom #{})]
-  (def dp
-    (memoize
-     (fn [[y x :as pos]]
-       ;(println y x)
-       (let [mark (get-in Map pos)]
-         (swap! visited conj pos)
-         (let [res (cond
-                     (= pos start) 0
-                     (= mark \#) -1000
-                     :else (let [up [(dec y) x]
-                                 fup (if (and (not (@visited up)) (not= \# (get-in Map up \#))) (inc (dp up)) -1000)
-                                 down [(inc y) x]
-                                 fdown (if (and (not (@visited down)) (not= \# (get-in Map up \#))) (inc (dp down)) -1000)
-                                 left [y (dec x)]
-                                 fleft (if (and (not (@visited left)) (not= \# (get-in Map up \#))) (inc (dp left)) -1000)
-                                 right [y (inc x)]
-                                 fright (if (and (not (@visited right)) (not= \# (get-in Map up \#))) (inc (dp right)) -1000)]
-                             (max fup fdown fleft fright)))]
-                                   ;(println pos res)
-           (swap! visited disj pos)
-           res)))))
-  (dp end))
+      [end] (for [x (range w) :when (= \. (get-in Map [(dec h) x]))] [(dec h) x])]
+  (defn longest-path [pos visited]
+    (if (= pos end)
+      (let [temp (count visited)] (when (> temp 6500) (println temp)) 0)
+      (let [new-visited (conj visited pos)
+            candidates (->> (map #(mapv + pos %) dirs)
+                            (remove new-visited)
+                            (remove #(= \# (get-in Map % \#))))]
+        (if (empty? candidates)
+          -10000000
+          (inc (apply max (map #(longest-path % new-visited) candidates)))))))
+  (longest-path start #{}))
+
+
 
 (let [Map (parse "./2023/in23")
       h (count Map) w (count (first Map))

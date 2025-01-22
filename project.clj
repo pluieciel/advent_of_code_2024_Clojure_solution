@@ -5,4 +5,4 @@
                  [org.clojure/core.async "1.5.648"]
                  [org.flatland/ordered "1.5.9"]
                  [org.clojure/data.priority-map "1.2.0"]]
-  :jvm-opts ["-Xss6144k"])
+  :jvm-opts ["-Xss1000000k"])
