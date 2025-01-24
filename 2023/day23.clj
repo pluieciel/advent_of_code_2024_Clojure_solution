@@ -114,10 +114,10 @@
 ;;         (swap! g_visited conj last2)
 ;;         (cond
 ;;           (empty? v) (swap! dict assoc start {e (inc step)})
-;;           (nil? e) (swap! dict assoc [127 135] (reduce-kv (fn [m k v] (assoc m k (+ step v))) {} (get @dict [127 135])))
+;;           (nil? e) (swap! dict assoc [127 135] {end step})
 ;;           :else (let [beg (first v)]
-;;                   (swap! dict assoc beg (assoc (get @dict beg {}) e (+ 2 step)))
-;;                   (swap! dict assoc e (assoc (get @dict e {}) beg (+ 2 step)))))
+;;                   (swap! dict assoc beg (assoc (get @dict beg {}) e (inc step)))
+;;                   (swap! dict assoc e (assoc (get @dict e {}) beg (inc step)))))
 ;;         (recur (distinct (concat (rest todo) (remove #(or (contains? @g_visited (first %)) (empty? (first %))) lst)))))))
 ;;   (spit "temp" @dict)
   (let [bitmap (apply merge (for [k (keys dict)] {k false}))
