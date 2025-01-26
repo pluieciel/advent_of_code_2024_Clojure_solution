@@ -39,18 +39,18 @@
    (- (*' x1 y2) (*' y1 x2))])  ; z-component: x1*y2 - y1*x2
 
 (let [data (parse "./2023/in24")
-      [[x0 y0 z0 vx0 vy0 vz0 :as v0] v1 v2 :as three] (take 3 data)]
+      [[x0 y0 z0 vx0 vy0 vz0 :as stone0] stone1 stone2 :as three] (take 3 data)]
   (->> three
-       (map #(map - % v0)) ;; shift system relative to stone0
+       (map #(map - % stone0)) ;; shift system relative to stone0
        ((fn [[_ [x1 y1 z1 vx1 vy1 vz1] [x2 y2 z2 vx2 vy2 vz2]]]
-          (let [[a b c] (->> (cross (cross [x1 y1 z1] [vx1 vy1 vz1])
-                                    (cross [x2 y2 z2] [vx2 vy2 vz2]))) ;; get rock direction (must go through origin)
+          (let [[a b c :as rockdir] (->> (cross (cross [x1 y1 z1] [vx1 vy1 vz1])
+                                                (cross [x2 y2 z2] [vx2 vy2 vz2]))) ;; get rock direction (must go through origin)
                 r1 (/ (- (* vx1 y1) (* vy1 x1)) (- (* vx1 b) (* vy1 a)))
-                hit1 [(* r1 a) (* r1 b) (* r1 c)]
-                t1 (repeat 3 (/ (- (* r1 a) x1) vx1))
+                hit1 (map * rockdir (repeat r1))
+                t1 (/ (- (* r1 a) x1) vx1)
                 r2 (/ (- (* vx2 y2) (* vy2 x2)) (- (* vx2 b) (* vy2 a)))
-                hit2 [(* r2 a) (* r2 b) (* r2 c)]
-                t2 (repeat 3 (/ (- (* r2 b) y2) vy2))
-                speed (map / (map - hit2 hit1) (map - t2 t1))
-                init (map - hit2 (map * speed t2))] 
-            (reduce + (map + init v0)))))))
+                hit2 (map * rockdir (repeat r2))
+                t2 (/ (- (* r2 b) y2) vy2)
+                speed (map / (map - hit2 hit1) (repeat (- t2 t1)))
+                init (map - hit2 (map * speed (repeat t2)))] 
+            (reduce + (map + init stone0)))))))
