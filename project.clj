@@ -4,5 +4,6 @@
                  [org.clojure/core.logic "1.1.0"]
                  [org.clojure/core.async "1.5.648"]
                  [org.flatland/ordered "1.5.9"]
-                 [org.clojure/data.priority-map "1.2.0"]]
+                 [org.clojure/data.priority-map "1.2.0"]
+                 [com.microsoft/z3 "4.13.4"]]
   :jvm-opts ["-Xss1000000k"])
