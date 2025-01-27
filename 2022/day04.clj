@@ -1,5 +1,5 @@
-;advent-of-code-2022.day03
-(ns day03
+;advent-of-code-2022.day04
+(ns day04
   (:require [clojure.string :as str]))
 
 (defn parse [i]
