@@ -5,7 +5,7 @@
 .cpcache
 .nrepl-port
 target/
-lein-repl-history
+.lein-repl-history
 
 # input
 in*
