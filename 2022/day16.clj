@@ -7,7 +7,7 @@
   (->> (slurp i)
        str/split-lines
        (map #(re-seq #"[A-Z]{2}|\d+" %))))
-
+;part 1
 (let [data (parse "./2022/in16")
       dict (atom {})]
   (doseq [[pos rate & dests] data]
