@@ -6,7 +6,7 @@
   (->> (slurp i)
        str/split-lines
        (map #(mapv read-string (re-seq #"\d+" %)))))
-
+;part 1
 (let [data (parse "./2022/in18")
       dict (set data)
       dims (apply map vector data)
@@ -27,7 +27,7 @@
       (when (= 1 (+ (getmark x y z) (getmark x (inc y) z)))
         (swap! cnt inc))))
   @cnt)
-
+;part 2
 (let [data (parse "./2022/in18")
       dict (set data)
       dims (apply map vector data)
