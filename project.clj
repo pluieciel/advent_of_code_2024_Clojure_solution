@@ -5,9 +5,7 @@
                  [org.clojure/core.async "1.5.648"]
                  [org.flatland/ordered "1.5.9"]
                  [org.clojure/data.priority-map "1.2.0"]
-                 ;[net.mikera/core.matrix "0.63.0"]
-                 [org.ojalgo/ojalgo "53.0.0"]
-                 ;[org.apache.commons/commons-math3 "3.6.1"]
-                 ;[loco "0.3.1"]
+                 ;[org.ojalgo/ojalgo "53.0.0"]
+                 ;[org.clojure/data.finger-tree "0.1.0"]
                  ]
   :jvm-opts ["-Xss1000000k"])
