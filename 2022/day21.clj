@@ -45,44 +45,28 @@
               (let [right @(promises b)
                     target (promises a)]
                 (when-not (realized? target) (deliver target right)))))
-          (#{"+" "*"} op)
+          :else
           (do
             (future
               (let [B @(promises a)
                     C @(promises b)
                     target (promises k)]
                 (when-not (realized? target)
-                  (deliver target (({"+" + "*" *} op) B C)))))
+                  (deliver target (({"+" + "*" * "-" - "/" /} op) B C)))))
             (future
               (let [A @(promises k)
                     B @(promises a)
                     target (promises b)]
                 (when-not (realized? target)
-                  (deliver target (({"+" - "*" /} op) A B)))))
+                  (deliver target (if (#{"+" "*"} op)
+                                    (({"+" - "*" /} op) A B)
+                                    (({"-" - "/" /} op) B A))))))))
             (future
               (let [A @(promises k)
                     C @(promises b)
                     target (promises a)]
                 (when-not (realized? target)
-                  (deliver target (({"+" - "*" /} op) A C))))))
-          (#{"-" "/"} op)
-          (do
-            (future
-              (let [B @(promises a)
-                    C @(promises b)
-                    target (promises k)]
-                (when-not (realized? target)
-                  (deliver target (({"-" - "/" /} op) B C)))))
-            (future
-              (let [A @(promises k)
-                    B @(promises a)
-                    target (promises b)]
-                (when-not (realized? target)
-                  (deliver target (({"-" - "/" /} op) B A)))))
-            (future
-              (let [A @(promises k)
-                    C @(promises b)
-                    target (promises a)]
-                (when-not (realized? target)
-                  (deliver target (({"-" + "/" *} op) C A))))))))))
+                  (deliver target (if (#{"+" "*"} op)
+                                    (({"+" - "*" /} op) A C)
+                                    (({"-" + "/" *} op) C A)))))))))
   @(promises "humn"))
