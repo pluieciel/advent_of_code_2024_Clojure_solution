@@ -32,13 +32,7 @@
           [[r c] newpos]
           (recur (rest todo)))))))
 
-(defn myp [final]
-  (doseq [r (range 10)]
-    (doseq [c (range 12)]
-      (print
-       (if (final [r c]) \# \.)))
-    (println)))
-
+;part 1
 (->> (loop [curr M order [:N :S :W :E] cnt 0]
        (if (= 10 cnt)
          curr
@@ -56,3 +50,24 @@
               r-r (inc (- (apply max rs) (apply min rs)))
               r-c (inc (- (apply max cs) (apply min cs)))]
           (- (* r-r r-c) (count final))))))
+
+;part 2
+(->> (loop [curr M order [:N :S :W :E] cnt 0]
+       (let [newpos (for [[r c] curr]
+                      (if (some curr (map #(mapv + [r c] %) alldirs))
+                        (get-pos [r c] order curr)
+                        [[r c] [r c]]))
+             cando (->> (map second newpos) frequencies (filter (fn [[k v]] (= 1 v))) keys set)
+             new (->> newpos
+                      (map (fn [[pre post]] (if (cando post) [pre post] [pre pre]))))]
+         (if (every? #(apply = %) new)
+           (inc cnt)
+           (recur (set (map second new)) (conj (vec (rest order)) (first order)) (inc cnt))))))
+
+;for debug
+(defn myp [final]
+  (doseq [r (range 10)]
+    (doseq [c (range 12)]
+      (print
+       (if (final [r c]) \# \.)))
+    (println)))
