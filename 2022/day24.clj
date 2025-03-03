@@ -11,10 +11,14 @@
 (def h (count M))
 (def w (count (first M)))
 (def dirs [[0 1] [0 -1] [1 0] [-1 0]])
-(def s-dirs {\> [0 1]
-             \< [0 -1]
-             \v [1 0]
-             \^ [-1 0]})
+(def s-dirs {\> [0 1] \< [0 -1] \v [1 0] \^ [-1 0]})
+(def start [0 1])
+(def end [(dec h) (- w 2)])
+(def state (->> (for [r (range 1 (dec h))
+                      c (range 1 (dec w))
+                      :when (not= \. (get-in M [r c]))]
+                  {(get-in M [r c]) [r c]})
+                (apply merge-with conj {\> #{} \v #{} \< #{} \^ #{}})))
 
 (defn next-state [state]
   (->> state
@@ -29,23 +33,27 @@
                      v))]))
        (into {})))
 
-(let [start [0 1]
-      end [(dec h) (- w 2)]
-      state (->> (for [r (range 1 (dec h))
-                       c (range 1 (dec w))
-                       :when (not= \. (get-in M [r c]))]
-                   {(get-in M [r c]) [r c]})
-                 (apply merge-with conj {\> #{} \v #{} \< #{} \^ #{}}))]
-  (loop [poss [start] state state steps 0]
+(defn cal [start end state]
+  (loop [poss [start] state state steps 1]
     (let [newstate (next-state state)
           candis (->> (mapcat (fn [pos]
                                 (->> (map (fn [dir] (mapv + pos dir)) dirs)
                                      (remove (fn [pos] (or (= \# (get-in M pos))
-                                                           (neg? (first pos)))))))
+                                                           (neg? (first pos))
+                                                           (= (first pos) h))))))
                               poss)
                       (reduce conj poss)
                       distinct)
           newposs (remove (fn [candi] (some #(% candi) (vals newstate))) candis)]
       (if (some #(= end %) newposs)
-        (+ steps 1)
+        [steps newstate]
         (recur newposs newstate (inc steps))))))
+
+;part 1
+(first (cal start end state))
+
+;part 2
+(let [[A stateA] (cal start end state)
+      [B stateB] (cal end start stateA)
+      [C _] (cal start end stateB)]
+  (+ A B C))
