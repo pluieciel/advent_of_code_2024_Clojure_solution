@@ -27,4 +27,4 @@
         (recur (filter #(= choice (subs % idx (inc idx))) todo) (inc idx))))))
 
 (let [data (parse "2021/in03")]
- (* (cal data > "1") (cal data < "0")))
+  (* (cal data > "1") (cal data < "0")))
