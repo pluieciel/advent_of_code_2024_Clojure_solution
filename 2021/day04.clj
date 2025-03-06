@@ -17,12 +17,13 @@
                                           (map set))))))))]))))
 
 (let [[lst Ms] (parse "2021/in04")
-      mem (atom nil)]
-  
+      mem (atom nil)
+      newMs (atom (set Ms))]
+
   (defn check [done table]
     (filter #(empty? (set/difference % done)) table))
 
-;part 1
+  ;part 1
   (loop [done (set (take 5 lst)) todo (drop 5 lst)]
     (let [res (for [table Ms :let [res (check done table)] :when (not-empty res)] [res table])]
       (if (empty? res)
@@ -31,4 +32,19 @@
              (apply set/union)
              (#(set/difference % done))
              (reduce +)
-             (* @mem))))))
+             (* @mem)))))
+
+  ;part 2
+  (loop [done (set (take 5 lst)) todo (drop 5 lst)]
+    (let [res (for [table @newMs :let [res (check done table)] :when (not-empty res)] [res table])]
+      (if (empty? res)
+        (do (reset! mem (first todo)) (recur (conj done (first todo)) (rest todo)))
+        (if (> (count @newMs) 1)
+          (do (doseq [one res] (swap! newMs disj (second one)))
+              (reset! mem (first todo))
+              (recur (conj done (first todo)) (rest todo)))
+          (->> res first second
+             (apply set/union)
+             (#(set/difference % done))
+             (reduce +)
+             (* @mem)))))))
