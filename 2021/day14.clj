@@ -26,7 +26,8 @@
 
 (defn cal [n]
   (loop [cnt 0 res (frequencies (partition 2 1 init))]
-    (if (= n cnt)
+    (if (> n cnt)
+      (recur (inc cnt) (step res))
       (->> res
            (mapcat (fn [[[a b] cnt]] [{a cnt} {b cnt}]))
            (apply merge-with +)
@@ -34,8 +35,7 @@
            ((fn [dict]
               (let [[_ mi] (apply min-key val dict) [_ ma] (apply max-key val dict)]
                 (- ma mi))))
-           (#(/ % 2)))
-      (recur (inc cnt) (step res)))))
+           (#(/ % 2))))))
 
 ;part 1
 (cal 10)
