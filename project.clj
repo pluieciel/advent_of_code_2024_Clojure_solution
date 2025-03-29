@@ -7,5 +7,6 @@
                  [org.clojure/data.priority-map "1.2.0"]
                  ;[org.ojalgo/ojalgo "53.0.0"]
                  ;[org.clojure/data.finger-tree "0.1.0"]
+                 [net.mikera/core.matrix "0.62.0"]
                  ]
   :jvm-opts ["-Xss1000000k"])
