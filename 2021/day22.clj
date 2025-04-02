@@ -7,7 +7,22 @@
        str/split-lines
        (map #(map read-string (re-seq #"on|off|-?\d+" %)))))
 
-(def data (parse "2021/in22"))
+(def data (parse "2021/ex22"))
+
+(defn volume [x1 x2 y1 y2 z1 z2]
+  (* (inc (- x2 x1))
+     (inc (- y2 y1))
+     (inc (- z2 z1))))
+
+(defn intersect [[x1 x2 y1 y2 z1 z2] [x3 x4 y3 y4 z3 z4]]
+  (let [x (max x1 x3)
+        y (max y1 y3)
+        z (max z1 z3)
+        x' (min x2 x4)
+        y' (min y2 y4)
+        z' (min z2 z4)]
+    (when (and (<= x x') (<= y y') (<= z z'))
+      [x x' y y' z z'])))
 
 ;part 1
 (loop [res #{} todo data]
