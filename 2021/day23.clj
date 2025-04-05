@@ -97,7 +97,7 @@
               nxt)
              (recur))))))
 
-;part 2 ;;same algo, need 5 min to finish calculation, not efficient
+;part 2 ;;same algo, need 5 min to finish calculation, not efficient; better to use A*
 (def Map2
   (let [insert "  #D#C#B#A#\n  #D#B#A#C#"
         ins-vec (->> insert str/split-lines (mapv vec))]
