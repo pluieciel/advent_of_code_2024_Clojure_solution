@@ -47,7 +47,7 @@
       poss-sorted (sort-by #(count (second %)) poss-idx)]
   (->> (conj poss-sorted [-1 '()])
        (partition 2 1)
-       (map (fn [[[a la] [b lb]]]
+       (map (fn [[[_ la] [b lb]]]
               [b (remove (set la) lb)]))
        (sort-by #(first (second %)))
        (take 6)
