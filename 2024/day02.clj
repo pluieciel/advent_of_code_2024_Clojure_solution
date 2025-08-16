@@ -1,30 +1,29 @@
 ;advent-of-code-2024.day-02
 (ns day02
   (:require [clojure.string :as str]))
-;part 1
-(let [input (slurp "input")
-      parse #(map read-string (str/split % #" "))
-      lines (map parse (str/split input #"\n"))
-      diff (map #(map - (butlast %) (rest %)) lines)
-      ok? #(or (every? #{1 2 3} %) (every? #{-1 -2 -3} %))
-      res (count (filter ok? diff))
-      ]
-  (println res))
 
-;part 2
-(let [input (slurp "input")
-      parse #(map read-string (str/split % #" "))
-      lines (map parse (str/split input #"\n"))
-      dif #(map - (butlast %) (rest %))
-      diff (map dif lines)
-      ok? #(or (every? #{1 2 3} %) (every? #{-1 -2 -3} %))
-      res (count (filter ok? diff))
+;;part 1
+(->> (slurp "2024/in02")
+     str/split-lines
+     (map (fn [line]
+            (->> (re-seq #"\d+" line)
+                 (map read-string)
+                 (partition 2 1)
+                 (map #(apply - %)))))
+     (filter #(or (every? #{1 2 3} %) (every? #{-1 -2 -3} %)))
+     count)
 
-      todo (remove #(ok? (dif %)) lines)
-      drop-nth #(concat (take % %2) (drop (inc %) %2))
-      ok2? #(some true?
-                  (for [n (range (count %))]
-                    (ok? (dif (drop-nth n %)))))
-      res2 (count (filter ok2? todo))
-      ]
-  (println (+ res res2)))
+;;part 2
+(->> (slurp "2024/in02")
+     str/split-lines
+     (map (fn [line]
+            (->> (re-seq #"\d+" line)
+                 (map read-string)
+                 ((fn [line]
+                    (for [i (range (count line))]
+                      (->> (concat (take i line) (drop (inc i) line))
+                           (partition 2 1)
+                           (map #(apply - %))))))
+                 (some #(or (every? #{1 2 3} %) (every? #{-1 -2 -3} %))))))
+     (keep identity)
+     count)
