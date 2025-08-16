@@ -1,7 +1,6 @@
 ;advent-of-code-2020.day22
 (ns day22
-  (:require [clojure.string :as str]
-            [clojure.set :as set]))
+  (:require [clojure.string :as str]))
 
 (defn parse [i]
   (->> (str/split (slurp i) #"\n\n")
