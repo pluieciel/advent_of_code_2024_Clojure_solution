@@ -1,7 +1,5 @@
 ;advent-of-code-2019.day04
-(ns day04
-  (:require [clojure.string :as str]
-            [clojure.set :as set]))
+(ns day04)
 
 (let [[s e] (->> (slurp "2019/in04")
                  (re-seq #"\d+")
