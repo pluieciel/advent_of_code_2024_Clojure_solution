@@ -10,10 +10,7 @@
 
 (def child->parent
   (->> (parse "2019/in06")
-       (reduce
-        (fn [acc [p c]]
-          (assoc acc c p))
-        {})))
+       (into {} (map (comp vec reverse)))))
 
 (defn cal [node cnt]
   (if-let [p (child->parent node)] 
