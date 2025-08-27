@@ -13,7 +13,7 @@
        (into {} (map (comp vec reverse)))))
 
 (defn cal [node cnt]
-  (if-let [p (child->parent node)] 
+  (if-let [p (child->parent node)]
     (cal p (if (number? cnt) (inc cnt) (conj cnt node)))
     cnt))
 
@@ -24,10 +24,7 @@
      (reduce +))
 
 ;; part2
-(let [path1 (cal "YOU" [])
-      path2 (cal "SAN" [])]
-  (->> (concat path1 path2)
-       frequencies
-       (filter #(= 1 (val %)))
-       count
-       (#(- % 2))))
+(->> (mapcat #(rest (cal % [])) ["YOU" "SAN"])
+     frequencies
+     (filter #(= 1 (val %)))
+     count)
